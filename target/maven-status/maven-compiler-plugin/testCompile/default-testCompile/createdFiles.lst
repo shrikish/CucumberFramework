@@ -1,0 +1,4 @@
+com\qa\framework\Pages\LoginPage.class
+com\qa\framework\Pages\DashboardPage.class
+com\qa\framework\StepDefinition\StepDefinitions.class
+com\qa\framework\Runner\RunCucumberTest.class
