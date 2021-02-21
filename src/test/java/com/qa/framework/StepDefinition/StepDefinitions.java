@@ -1,7 +1,5 @@
 package com.qa.framework.StepDefinition;
 
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -11,30 +9,42 @@ import com.qa.framework.utilities.Browserstack_Connection;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class StepDefinitions {	
 	WebDriver driver;
+	public Scenario scenario;
 
 	@Before
 	public void launchBrowser() {
-		
-		String exeBrowser = System.getProperty("browser");
-		
-		if(exeBrowser.contains("CHROME")) {
-			System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "\\src\\test\\resources\\Webdrivers\\ChromeDriver_85.0.4183.87.exe");
-			driver = new ChromeDriver();
-			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		String exeBrowser = null;
+		try {
+			exeBrowser = System.getProperty("browser");
+		} catch (Exception e) {
+			exeBrowser = "CHROME";
 		}
-		else if(exeBrowser.contains("BS_CHROME")) {
+		
+		if(exeBrowser.equals("CHROME")) {
+			System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") + "\\src\\test\\resources\\Webdrivers\\chromedriver.exe");
+			driver = new ChromeDriver();
+			//driver.manage().window().maximize();
+			//driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+			System.out.println("\n\n==============\n\nHashcode : " + driver.hashCode() + "\n\n==============\n\n");
+		}
+		else if(exeBrowser.equals("BS_CHROME")) {
 			driver = Browserstack_Connection.BS_Connect();
 		}
 	}
 	
-	
+	@Before
+	public void setScenario(Scenario scenario) {
+		this.scenario = scenario;
+		
+	}
+
 	@Given("I launch application")
 	public void i_launch_application() {
 		driver.get("https://demoqa.com/login");
